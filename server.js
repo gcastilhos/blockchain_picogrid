@@ -7,7 +7,7 @@ const app = express();
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
 const port = process.env.PORT || 80;
-const DATA_URI = 'https://eventqueue.herokuapp.com/events';
+const DATA_URI = process.env.DATA_URI || 'https://eventqueue.herokuapp.com/events';
 
 app.get('/events', (req, res) => {
   console.log('Events requested');
