@@ -1,67 +1,29 @@
 <template>
   <div id="app">
-    <div id="slider">
-      <table>
-        <thead>
-          <tr>
-            <th class="header big-font black" colspan="15">
-                <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
-            </th>
-            <th><cell-separator></cell-separator></th>
-            <th class="big-font red">
-              <span>EVENT HASHING</span>
-            </th>
-          </tr>
-          <tr>
-            <th v-for="(item, index) in header" :key="'head_' + index" class="header dark-blue">
-              {{ item }}
-            </th>
-            <th><cell-separator></cell-separator></th>
-            <th><cell-separator></cell-separator></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(record, rowIndex) in records" :key="'rec_' + rowIndex" class="row">
-            <td v-for="(item, index) in record" :key="'val_' + index" class="record original dark-blue text mono" v-html="item">
-            </td>
-            <td><cell-separator></cell-separator></td>
-            <td class="record dark-blue">
-              <div class="text hash">
-                {{ record | recordAsString | encode }}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="15"><cell-separator></cell-separator></td>
-            <td><cell-separator></cell-separator></td>
-            <td class="final-hash">
-              <div class="text note no-lateral-padding">
-                <span>Block HASH for {{numberOfEvents}}</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="15"><cell-separator></cell-separator></td>
-            <td><cell-separator></cell-separator></td>
-            <td class="yellow final-hash">
-              <div class="text hash">
-                {{ finalHash }}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="header big-font black">
+       <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
     </div>
+    <div><cell-separator></cell-separator></div>
+    <div class="big-font red">
+       <span>EVENT HASHING</span>
+    </div>
+    <records-table :records="records"
+             :header="header"
+             :finalHash="finalHash"
+             :batch="batch"
+             >
+    </records-table>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import CellSeparator from './components/CellSeparator.vue'
+import CellSeparator from './components/CellSeparator.vue';
+import RecordsTable from './components/RecordsTable.vue';
 import VueRouter from 'vue-router';
-import sha256 from 'sha256';
 import axios from 'axios';
-import mock_data from '@/mockdata.js'
+import mock_data from '@/mockdata.js';
+import encode from '@/encoder.js';
 Vue.use(VueRouter);
 
 var router = new VueRouter({
@@ -69,14 +31,8 @@ var router = new VueRouter({
   routes: []
 });
 
-var encode = function(text) {
-  if (text !== '') {
-    return sha256(text);
-  }
-  return text;
-};
-
 const DATA_API_URI = process.env.VUE_APP_DATA_API_URI || "/events";
+const MAX_BATCH = parseInt(process.env.VUE_APP_MAX_BATCH || 50);
 
 export default {
   router,
@@ -90,13 +46,8 @@ export default {
     }
   },
   components: {
-    'cell-separator': CellSeparator
-  },
-  filters: {
-    encode,
-    recordAsString: function(record) {
-      return record.join("|");
-    },
+    'cell-separator': CellSeparator,
+    'records-table': RecordsTable
   },
   methods: {
     getData: async function(next_batch) {
@@ -125,23 +76,15 @@ export default {
       this.finalHash = encode(finalHash);
     },
   },
-  computed: {
-    numberOfEvents: function() {
-      if (this.batch == 1) {
-        return "1 event";
-    }
-      return "each " + this.batch + " events"
-    }
-  },
   mounted: function() {
     this.getData(this.batch);
   },
   created: function() {
     setInterval(function() {
       let next_batch;
-      if (this.batch === 100) {
+      if (this.batch === MAX_BATCH) {
         next_batch = 1;
-        this.records.splice(0, 100);
+        this.records.splice(0, MAX_BATCH);
       } else {
         next_batch = this.batch + 1;
       }
@@ -161,7 +104,6 @@ export default {
 }
 
 #slider {
- border: 3px inset black;
  width: 800px;
  height: 600px;
  overflow-x: scroll;
@@ -177,7 +119,7 @@ body {
  */
 
 table {
-    padding: 50px;
+    padding: 0;
     border-spacing: 0;
 }
 
