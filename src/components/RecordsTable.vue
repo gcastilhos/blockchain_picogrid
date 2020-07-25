@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import encode from '@/encoder.js';
+import encode from '@/encoder.js'
 
 export default {
   props: {
@@ -38,13 +38,13 @@ export default {
   filters: {
     encode,
     recordAsString: function(record) {
-      return record.join("|");
+      return record.join("|")
     }
   },
   computed: {
     numberOfEvents: function() {
       if (this.batch == 1) {
-        return "1 event";
+        return "1 event"
     }
       return "each " + this.batch + " events"
     }
@@ -62,5 +62,18 @@ export default {
 
 tr.row {
   display: table-row;
+}
+
+.record.original {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.text {
+    font-family: "Lucida Console", Monaco, Courier, monospace;
+}
+
+.mono {
+    font-family: "Lucida Console", Monaco, Courier, monospace;
 }
 </style>

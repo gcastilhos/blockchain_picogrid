@@ -1,8 +1,8 @@
 <template>
   <div>
-    <event-number :event-number-text="'Initial Event Number: ' + initialNumber"></event-number>
-    <event-number :event-number-text="'Last Event Number:&nbsp&nbsp;&nbsp;' + finalNumber"></event-number>
-    <table id="totals" class="totals">
+    <div><h5 v-html="'Initial Event Number: ' + initialNumber"></h5></div>
+    <div><h5 v-html="'Last Event Number:&nbsp&nbsp;&nbsp;' + finalNumber"></h5></div>
+    <table id="totals">
       <tr>
         <th v-for="(item, index) in categoryHeader"
             v-html="item"
@@ -14,7 +14,7 @@
         <td v-for="(item, index) in total"
             :key="'total_' + index"
             :class="{'text-right': index == 2, 'text-left': index !== 2}"
-            class="grey border_lightBlue">
+            class="grey">
           {{ item }}
         </td>
       </tr>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import EventNumber from './EventNumber.vue'
 import encode from '@/encoder.js'
 
 export default {
@@ -38,9 +37,6 @@ export default {
       categoryHeader: ['Use<br />Category', 'Name&nbsp;of&nbsp;the&nbsp;Category', 'TOTAL<br />in&nbsp;KWH'],
       batch: 1
     }
-  },
-  components: {
-    eventNumber: EventNumber,
   },
   filters: {
     encode,
@@ -93,91 +89,34 @@ export default {
 </script>
 
 <style>
-/**
- * Table-like DIVs
- */
-.dark_blue {
-  background-color: #038cfc;
-}
-
 table#totals {
   margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 5px;
 }
 
 div#totals .row .cell {
   font-size: 12pt;
 }
 
-/**
- * Hash specific styles
- */
-
-.text {
-  font-family: "Lucida Console", Monaco, Courier, monospace;
-}
-
-div.text.hash {
-  background-color: lightGrey;
-  border: 1px black solid;
-  padding: 2px;
-  text-align: center;
-}
-
-div.final_hash {
-  background-color: lightBlue;
-  padding: 0;
-  text-align: center;
-}
-
-div.final_hash div.row.yellow div.cell {
-  padding: 10px;
-}
-
-div.note {
-  text-align: center;
-  font-size: 14pt;
-  font-weight: bold;
-  border: 1px black solid;
-  padding: 2px;
-  background-color: white;
-}
-
-/**
- * Generic styles
- */
-
 .grey {
   background-color: #e8ebf5;
 }
 
-.mono {
-  font-family: "Lucida Console", Monaco, Courier, monospace;
-}
-
-.no_space_break {
-  white-space: nowrap;
-}
-
-/**
- * Events categorization
- */
-
-table.totals {
-  border-collapse: separate;
-}
-
-table.totals {
-  border-spacing: 5px;
-}
-
-table.totals th {
+table#totals th {
   padding: 5px;
   white-space: wrap;
 }
 
-table.totals td {
+table#totals td {
   padding: 5px;
   white-space: nowrap;
 }
 
+h5 {
+    font-size: 16pt;
+    font-weight: bold;
+    margin: 5px 0;
+    text-align: center;
+}
 </style>
