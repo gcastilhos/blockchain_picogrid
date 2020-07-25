@@ -1,42 +1,23 @@
 <template>
   <div id="slider">
-    <table>
+    <table id="records">
       <thead>
         <tr>
-          <th v-for="(item, index) in header" :key="'head_' + index" class="header dark-blue">
+          <th v-for="(item, index) in header" 
+              :key="'head_' + index"
+              class="header dark-blue">
             {{ item }}
           </th>
-          <th><cell-separator></cell-separator></th>
-          <th><cell-separator></cell-separator></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(record, rowIndex) in records" :key="'rec_' + rowIndex" class="row">
-          <td v-for="(item, index) in record" :key="'val_' + index" class="record original dark-blue text mono" v-html="item">
-          </td>
-          <td><cell-separator></cell-separator></td>
-          <td class="record dark-blue">
-            <div class="text hash">
-              {{ record | recordAsString | encode }}
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="15"><cell-separator></cell-separator></td>
-          <td><cell-separator></cell-separator></td>
-          <td class="final-hash">
-            <div class="text note no-lateral-padding">
-              <span>Block HASH for {{numberOfEvents}}</span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="15"><cell-separator></cell-separator></td>
-          <td><cell-separator></cell-separator></td>
-          <td class="yellow final-hash">
-            <div class="text hash">
-              {{ finalHash }}
-            </div>
+        <tr v-for="(record, rowIndex) in records"
+            :key="'rec_' + rowIndex">
+          <td v-for="(item, index) in record"
+              :key="'val_' + index"
+              class="record original dark-blue text mono"
+              :style="{textAlign: index > 12 ? 'left' : 'right'}"
+              v-html="item">
           </td>
         </tr>
       </tbody>
@@ -45,7 +26,6 @@
 </template>
 
 <script>
-import CellSeparator from './CellSeparator.vue';
 import encode from '@/encoder.js';
 
 export default {
@@ -54,9 +34,6 @@ export default {
     records: Array,
     finalHash: String,
     batch: Number
-  },
-  components: {
-    cellSeparator: CellSeparator
   },
   filters: {
     encode,
@@ -76,4 +53,14 @@ export default {
 </script>
 
 <style>
+#slider {
+  width: 100%;
+  height: 650px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+tr.row {
+  display: table-row;
+}
 </style>

@@ -1,25 +1,40 @@
 <template>
   <div id="app">
-    <div class="header big-font black">
-       <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-7 big-font text-center">
+          <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
+        </div>
+        <div class="col-4 not-so-big-font red text-center">
+          <span>CONSUMPTION<br />CONSOLIDATION&nbsp;PER<br />CATEGORY</span>
+        </div>
+      </div>
+      <div class="col-1">
+      </div>
+      <div class="row">
+        <div class="col-7">
+          <records-table :records="records"
+                         :header="header"
+                         :finalHash="finalHash"
+                         :batch="batch"
+                         >
+          </records-table>
+        </div>
+        <div class="col-4">
+          <categories-table :records="records">
+          </categories-table>
+        </div>
+        <div class="col-1">
+        </div>
+      </div>
     </div>
-    <div><cell-separator></cell-separator></div>
-    <div class="big-font red">
-       <span>EVENT HASHING</span>
-    </div>
-    <records-table :records="records"
-             :header="header"
-             :finalHash="finalHash"
-             :batch="batch"
-             >
-    </records-table>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import CellSeparator from './components/CellSeparator.vue';
 import RecordsTable from './components/RecordsTable.vue';
+import CategoriesTable from './components/CategoriesTable.vue';
 import VueRouter from 'vue-router';
 import axios from 'axios';
 import mock_data from '@/mockdata.js';
@@ -46,8 +61,8 @@ export default {
     }
   },
   components: {
-    'cell-separator': CellSeparator,
-    'records-table': RecordsTable
+    'records-table': RecordsTable,
+    'categories-table': CategoriesTable
   },
   methods: {
     getData: async function(next_batch) {
@@ -103,15 +118,13 @@ export default {
   font-family: Arial, Helvetica, Sans-serif;
 }
 
-#slider {
- width: 800px;
- height: 600px;
- overflow-x: scroll;
- overflow-y: scroll;
+body {
+  background-color: lightBlue !important;
 }
 
-body {
-  background: lightBlue;
+.container-fluid {
+  padding-top: 50px;
+  width: 97% !important;
 }
 
 /**
@@ -126,6 +139,7 @@ table {
 .header {
     font-weight: bold;
     word-wrap: break-word;
+    border-top: 1px black solid;
     border-bottom: 1px black solid;
 }
 
@@ -184,7 +198,12 @@ div.note {
     font-size: 24pt;
     font-family: Arial, Helvetica, Sans-serif;
     font-weight: bold;
-    text-align: center;
+}
+
+.not-so-big-font {
+    font-size: 18pt;
+    font-family: Arial, Helvetica, Sans-serif;
+    font-weight: bold;
 }
 
 .red {
