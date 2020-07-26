@@ -19,9 +19,6 @@
         </td>
       </tr>
     </table>
-    <div id="toBlockchain" class="text-center">
-      <a href="#blockchain">To Blockchain &darr;</a>
-    </div>
   </div>
 </template>
 

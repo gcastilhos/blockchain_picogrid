@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <a name="top"></a>
     <div class="container-fluid">
       <div class="row">
         <div class="col-9 big-font text-center">
@@ -25,43 +24,6 @@
         </div>
       </div>
     </div>
-    <div id="blockchain" class="container-fluid">
-      <a name="blockchain"></a>
-      <a href="#top">Back to Top &uarr;</a>
-      <div class="row">
-        <div class="col">
-          <blockchain-house :index="1"
-                            :houseNo="0"
-                            :active="true"
-                            :hash="'00234232324442344'"
-                            :eventData="'234, 234, 2342, 23432, 2342'"
-                            :blockNo="1"
-                            :previousHash="'00224233423232432'"
-                            :originalHash="'00234232324442344'"
-                            :blocks="1"
-                            :nonce="34535">
-          </blockchain-house>
-        </div>
-        <div class="col arrow">
-          <div>
-            <span>&rarr;</span>
-          </div>
-        </div>
-        <div class="col">
-          <blockchain-house :index="1"
-                            :houseNo="0"
-                            :active="true"
-                            :hash="'00234232324442344'"
-                            :eventData="'234, 234, 2342, 23432, 2342'"
-                            :blockNo="1"
-                            :previousHash="'00224233423232432'"
-                            :originalHash="'00234232324442344'"
-                            :blocks="1"
-                            :nonce="34535">
-          </blockchain-house>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -69,7 +31,6 @@
 import Vue from 'vue'
 import RecordsTable from './components/RecordsTable.vue'
 import CategoriesTable from './components/CategoriesTable.vue'
-import BlockchainHouse from './components/BlockchainHouse.vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
 import mock_data from '@/mockdata.js'
@@ -97,8 +58,7 @@ export default {
   },
   components: {
     'records-table': RecordsTable,
-    'categories-table': CategoriesTable,
-    'blockchain-house': BlockchainHouse
+    'categories-table': CategoriesTable
   },
   methods: {
     getData: async function(next_batch) {
@@ -204,22 +164,4 @@ tr.row {
 .red {
     color: red;
 }
-
-.arrow {
-  font-size: 48pt;
-  font-weight: bold;
-  margin-top: 150px;
-  color: #038cfc;
-}
-
-#blockchain div.col {
-  min-width: 450px;
-  max-width: 450px;
-}
-
-#blockchain div.col.arrow {
-  min-width: 80px;
-  max-width: 80px;
-}
-
 </style>
