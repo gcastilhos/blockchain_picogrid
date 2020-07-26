@@ -60,10 +60,6 @@ export default {
   overflow-y: scroll;
 }
 
-tr.row {
-  display: table-row;
-}
-
 .record.original {
     text-align: right;
     white-space: nowrap;

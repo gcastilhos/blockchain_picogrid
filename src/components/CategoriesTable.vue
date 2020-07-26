@@ -19,6 +19,9 @@
         </td>
       </tr>
     </table>
+    <div id="toBlockchain" class="text-center">
+      <a href="#blockchain">To Blockchain &darr;</a>
+    </div>
   </div>
 </template>
 
@@ -105,7 +108,7 @@ div#totals .row .cell {
 
 table#totals th {
   padding: 5px;
-  white-space: wrap;
+  white-space: normal;
 }
 
 table#totals td {
@@ -118,5 +121,9 @@ h5 {
     font-weight: bold;
     margin: 5px 0;
     text-align: center;
+}
+
+div#toBlockchain {
+  margin-top: 20px;
 }
 </style>
