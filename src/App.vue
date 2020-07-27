@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <div class="container-xl slider">
+    <div class="container-xl title">
       <div class="row">
         <div class="col-xl-12 big-font text-center red">
           <span>CONSUMPTION CONSOLIDATION PER CATEGORY</span>
         </div>
       </div>
+    </div>
+    <div class="container-xl slider">
       <div v-for="rowInd in 4" 
            :key="'r' + rowInd"
            class="row">
@@ -17,6 +19,13 @@
                             @categoryTotals="logEvent($event)"
                             :picogridNumber="gridNumber(rowInd, colInd)">
           </categories-table>
+        </div>
+      </div>
+    </div>
+    <div class="container-xl title">
+      <div class="row">
+        <div class="col-xl-12 big-font text-center red">
+          <span>HASH BLOCKS</span>
         </div>
       </div>
     </div>
@@ -86,7 +95,7 @@ body {
   background-color: lightBlue !important;
 }
 
-.container-xl {
+.container-xl.title {
   padding-top: 50px;
   padding-bottom: 50px;
 }
