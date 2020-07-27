@@ -91,11 +91,11 @@ export default {
   },
   created: function() {
     setInterval(function() {
+      console.log("REQUEST DELAY: " + this.interval)
       if (this.batch % MAX_BATCH === 0) {
         let totals = this.categoryTotals.slice()
         totals.splice(0, 0, this.picogridNumber)
         totals.splice(0, 0, this.batch)
-        //this.$emit('categoryTotals', totals)
         this.$store.dispatch('addPicogridTotals', {totals: totals})
         this.records.splice(0, MAX_BATCH)
       }
