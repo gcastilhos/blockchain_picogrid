@@ -40,7 +40,7 @@ export default {
   data: function () {
     return {
       batch: 1,
-      interval: process.env.VUE_APP_DELAY || 10000,
+      interval: parseInt(process.env.VUE_APP_DELAY || 10000),
       totalsData: []
     }
   },

@@ -54,5 +54,15 @@ VUE_APP_HEADERS='{"Access-Control-Allow-Origin": "http://localhost:5000/"}' # He
 VUE_APP_DATA_API_URI=http://localhost:5000/events # Local server (event queue)
 ```
 
+### Heroku NODE_ENV
+
+ON Heroku, each environment should have its `NODE_ENV` variable set
+
+```
+heroku config:set NODE_ENV=development --app blockchainpicogrid-dev
+heroku config:set NODE_ENV=staging --app blockchainpicogrid-stage
+heroku config:set NODE_ENV=production --app blockchainpicogrid
+```
+
 ### Setting CORS
 
