@@ -10,7 +10,6 @@ const port = process.env.PORT || 80;
 const DATA_URI = process.env.DATA_URI || 'https://eventqueue.herokuapp.com/events';
 
 app.get('/events', (req, res) => {
-  var jsonResponse;
   fetch(DATA_URI, {method: 'GET'}).
     then(res => res.json()).
     then((json) => {
