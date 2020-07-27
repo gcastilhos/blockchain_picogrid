@@ -32,7 +32,7 @@ const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS || "{}")
 
 export default {
   props: {
-    interval: String,
+    interval: Number,
     picogridNumber: Number
   },
   data: function() {
