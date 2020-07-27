@@ -28,6 +28,7 @@ import encode from '@/encoder.js'
 
 const MAX_BATCH = parseInt(process.env.VUE_APP_MAX_BATCH || 50)
 const DATA_API_URI = process.env.VUE_APP_DATA_API_URI || "/events"
+const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS || "{}")
 
 export default {
   props: {
@@ -61,9 +62,7 @@ export default {
     getData: async function(next_batch) {
       var data
       try {
-        let response = await axios.get(DATA_API_URI, {timeout: 10000,
-                                                      headers: {"Access-Control-Allow-Origin": "http://localhost:5000/"}
-        })
+        let response = await axios.get(DATA_API_URI, {timeout: 10000, headers: HEADERS})
         data = response.data
       } catch (error) {
         console.error("Error: " + error)
@@ -94,9 +93,10 @@ export default {
     setInterval(function() {
       if (this.batch % MAX_BATCH === 0) {
         let totals = this.categoryTotals.slice()
+        totals.splice(0, 0, this.picogridNumber)
         totals.splice(0, 0, this.batch)
-        this.$emit('categoryTotals', totals)
-        this.$emit('batchNumber', this.batch)
+        //this.$emit('categoryTotals', totals)
+        this.$store.dispatch('addPicogridTotals', {totals: totals})
         this.records.splice(0, MAX_BATCH)
       }
       this.batch = this.batch + 1

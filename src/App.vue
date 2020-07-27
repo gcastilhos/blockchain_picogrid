@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container-xl">
+    <div class="container-xl slider">
       <div class="row">
         <div class="col-xl-12 big-font text-center red">
           <span>CONSUMPTION CONSOLIDATION PER CATEGORY</span>
@@ -15,16 +15,15 @@
           <categories-table v-if="gridNumber(rowInd, colInd) < 12"
                             :interval="interval"
                             @categoryTotals="logEvent($event)"
-                            @batchNumber="setTotalsData($event)"
                             :picogridNumber="gridNumber(rowInd, colInd)">
           </categories-table>
         </div>
       </div>
     </div>
-    <div id="hash" class="container-xl">
-      <div v-for="(item, index) in totals" :key="'r' + index" class="row">
+    <div id="hash" class="container-xl slider">
+      <div v-for="(item, index) in totals.entries()" :key="'r' + item[0]" class="row">
         <div class="col-xl-12">
-          <event-totals :totals="item"></event-totals>
+          <event-totals :totals="item[1]" :blockNumber="index"></event-totals>
         </div>
       </div>
 
@@ -41,10 +40,8 @@ export default {
   data: function () {
     return {
       batch: 1,
-      batchNumber: 0,
       interval: process.env.VUE_APP_DELAY || 10000,
-      totalsData: [],
-      totals: []
+      totalsData: []
     }
   },
   components: {
@@ -58,19 +55,19 @@ export default {
     logEvent: function(event) {
       this.totalsData.push(event)
     },
-    setTotalsData: function(batchNumber) {
-      this.batchNumber = batchNumber
-      this.totals.push(this.totalsHash())
-    },
     totalsHash: function() {
       let result = ''
-      let batchNumber = this.batchNumber
       this.totalsData.forEach(item => {
-        if (item[0] === batchNumber) {
+        if (item[0] === 50) {
           result += JSON.stringify(item.slice(1))
         }
       })
       return sha256(result)
+    }
+  },
+  computed: {
+    totals: function() {
+      return this.$store.getters.picogridsHash
     }
   }
 }
@@ -129,5 +126,12 @@ td, th {
 
 .red {
     color: red;
+}
+
+.slider {
+  width: 100%;
+  height: 1000px;
+  overflow-y: scroll;
+  margin-bottom: 50px;
 }
 </style>
