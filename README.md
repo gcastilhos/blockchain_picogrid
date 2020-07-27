@@ -26,20 +26,32 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## Additional Modules
 
 * axios
-* express
-* node-fetch
-* vue-router
-* sha256
-* jest (for testing)
 * bootstrap
+* express
+* jest (for testing)
+* node-fetch
+* sha256
+* vue-router
+* vuex
 
 ## Events Server For Testing
 
-The environment variable is set in `.env.local`
+The environment variables are set in `.env.local` for development. The `.env` file follows this convention for each environemnt
 
 ```
-VUE_APP_DELAY=2000
-VUE_APP_DATA_API_URI=http://localhost:5000/events
+.env.local # local environment
+.env.development # blockchainpicogrid11-dev
+.env.staging # blockchainpicogrid11-stage
+.env.production # blockchainpicogrid11
+```
+
+These variables are set locally
+
+```
+VUE_APP_DELAY=1000 # Delay between calls to local server
+VUE_APP_MAX_BATCH=10 # Number of requests before running the block creation algorithm (hash)
+VUE_APP_HEADERS='{"Access-Control-Allow-Origin": "http://localhost:5000/"}' # Header to use CORS (see below)
+VUE_APP_DATA_API_URI=http://localhost:5000/events # Local server (event queue)
 ```
 
 ### Setting CORS
