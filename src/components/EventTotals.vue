@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <span>Block #{{ blockNumber }}:</span> <span class="hash mono">{{ totals }}</span>
+  <div class="hash-frame">
+    Block #{{ blockNumber }}: <span class="hash mono">{{ totals }}</span>
   </div>
 </template>
 
@@ -14,13 +14,12 @@ export default {
 div {
   border: 1px solid grey;
   padding: 3px;
-  margin-bottom: 5px;
   border-radius: 5px;
-}
-
-span {
   font-weight: bold;
-  font-size: 18pt;
+  font-size: 2.2em;
+  word-wrap: break-word;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 span.hash {
