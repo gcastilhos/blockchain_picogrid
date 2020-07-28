@@ -16,7 +16,6 @@
              class="col-xl-4">
           <categories-table v-if="gridNumber(rowInd, colInd) < 12"
                             :interval="interval"
-                            @categoryTotals="logEvent($event)"
                             :picogridNumber="gridNumber(rowInd, colInd)">
           </categories-table>
         </div>
@@ -43,14 +42,12 @@
 <script>
 import CategoriesTable from './components/CategoriesTable.vue'
 import EventTotals from './components/EventTotals.vue'
-import sha256 from 'sha256';
 
 export default {
   data: function () {
     return {
       batch: 1,
-      interval: parseInt(process.env.VUE_APP_DELAY || 10000),
-      totalsData: []
+      interval: parseInt(process.env.VUE_APP_DELAY || 10000)
     }
   },
   components: {
@@ -60,23 +57,11 @@ export default {
   methods: {
     gridNumber: function(row, col) {
       return (row - 1) * 3 + col
-    },
-    logEvent: function(event) {
-      this.totalsData.push(event)
-    },
-    totalsHash: function() {
-      let result = ''
-      this.totalsData.forEach(item => {
-        if (item[0] === 50) {
-          result += JSON.stringify(item.slice(1))
-        }
-      })
-      return sha256(result)
     }
   },
   computed: {
     totals: function() {
-      return this.$store.getters.picogridsHash
+      return this.$store.getters.picogridsHashes
     }
   }
 }
