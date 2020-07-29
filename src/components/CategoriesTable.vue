@@ -23,8 +23,7 @@
 
 <script>
 import axios from 'axios'
-import mockdata from '@/mockdata.js'
-import encode from '@/encoder.js'
+import {MOCK_DATA} from '@/mockdata'
 
 const MAX_BATCH = parseInt(process.env.VUE_APP_MAX_BATCH || 50)
 const DATA_API_URI = process.env.VUE_APP_DATA_API_URI || "/events"
@@ -46,7 +45,6 @@ export default {
     }
   },
   filters: {
-    encode,
     recordAsString: function(record) {
         return record.join("|")
     }
@@ -66,24 +64,11 @@ export default {
         data = response.data
       } catch (error) {
         console.error("Error: " + error)
-        data = mockdata
+        data = MOCK_DATA
       }
       this.records.push(data.data[0])
       this.batch = next_batch
       this.header = data.columns
-      this.encodeAll()
-    },
-    encodeAll: function() {
-      var finalHash = ''
-      this.records.forEach((rec) => {
-        finalHash += encode(rec)
-      })
-      this.finalHash = encode(finalHash)
-    },
-    getTotals: function() {
-      this.records.each(rec => {
-        this.totals.push(rec[12, 14])
-      })
     }
   },
   mounted: function() {
