@@ -15,18 +15,7 @@ app.get('/events', (req, res) => {
   fetch(DATA_URI, {method: 'GET'}).
     then(res => res.json()).
     then((json) => {
-      let columns = [];
-      let data = [];
-      for (var key in json[0]) {
-        columns.push(key);
-        data.push(json[0][key]);
-      }
-      jsonResponse = {
-        columns: columns,
-        data: [data]
-      }
-      console.log(jsonResponse);
-      res.send(jsonResponse);
+      res.send(json);
     });
 });
 
