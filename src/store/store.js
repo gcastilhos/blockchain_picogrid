@@ -1,53 +1,73 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import encode from '@/encoder.js'
-import INITIAL_HASH from '@/mockdata.js'
 Vue.use(Vuex)
+import {INITIAL_HASH} from '@/mockdata'
+import axios from 'axios'
+
+const ENCODE_API_URI = process.env.VUE_APP_ENCODE_API_URI || "/hash"
+const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS || "{}")
 
 export default new Vuex.Store({
   state: {
     picogridTotals: [],
-    previousHash: INITIAL_HASH
+    picogridSubTotals: [],
+    previousHash: INITIAL_HASH,
+    hashCodes: [],
+    totalsIndex: -1
   },
   getters: {
-    picogridsHash: state => {
-
-      let addPicogrid = () => {
-        let picogridValues = new Map()
-        state.picogridTotals.forEach(item => {
-          if (picogridValues.has(item[0])) {
-            picogridValues.get(item[0]).push(item.slice(1))
-          } else {
-            picogridValues.set(item[0], [item.slice(1)])
-          }
-        })
-        return picogridValues
-      }
-
-      let createHash = (values) => {
-        let bn = new Map()
-        for (const pair of values.entries()) {
-          if (pair[1].length === 11) {
-            let sortedValuesAsString = pair[1].sort((a, b) => b[0] < a[0]).map(a => JSON.stringify(a.slice(1))).join(',')
-            let encodedValues = encode(sortedValuesAsString)
-            state.previousHash = encodedValues.hash
-            bn.set(pair[0], encodedValues.hash)
-          }
-        }
-        return bn
-      }
-
-      return createHash(addPicogrid())
+    picogridsHashes: state => {
+      return state.picogridTotals
+    },
+    previousHash: state => {
+      return state.previousHash
+    },
+    hashCodes: state => {
+      return state.hashCodes
+    },
+    picogridTotalsCurrent: state => {
+      return state.totalsIndex >=0 ? state.picogridTotals[state.totalsIndex] : undefined
+    },
+    currentIndex: state => {
+      return state.totalsIndex
     }
   },
   mutations: {
     addPicogridTotals(state, payload) {
-      state.picogridTotals.push(payload.totals)
+      state.picogridSubTotals.push(payload.totals)
+      if (state.picogridSubTotals.length == 11) {
+        let sortedValuesAsString = state.picogridSubTotals.sort((a, b) => b[1] < a[1]).map(a => JSON.stringify(a.slice(2))).join(',')
+        state.picogridTotals.push(sortedValuesAsString)
+        state.totalsIndex++
+        state.picogridSubTotals = []
+      }
+    },
+    updatePreviousHash(state, payload) {
+      state.previousHash = payload.newHash
+    },
+    addHashCodes(state, payload) {
+      state.hashCodes.push(payload.newHash)
     }
   },
   actions: {
     addPicogridTotals(context, payload) {
       context.commit('addPicogridTotals', payload)
+      let currentTotals = context.getters.picogridTotalsCurrent
+      let hashCodes = context.getters.hashCodes
+      let currentIndex = context.getters.currentIndex
+      if (currentTotals !== undefined && hashCodes.length < currentIndex + 1) {
+        try {
+          let uri = ENCODE_API_URI + "?previous=" + context.getters.previousHash + "&data=" + encodeURIComponent(currentTotals)
+          axios.get(uri, {timeout: 10000, headers: HEADERS})
+            .then(response => {
+              let hashCode = response.data[1]
+              context.commit('addHashCodes', {newHash: hashCode})
+              context.commit('updatePreviousHash', {newHash: hashCode})
+          })
+        } catch(error) {
+          console.log("Error while encoding data: " + error)
+        }
+      }
     }
   }
 })

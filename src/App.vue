@@ -29,12 +29,11 @@
       </div>
     </div>
     <div id="hash" class="container-xl slider">
-      <div v-for="(item, index) in totals.entries()" :key="'r' + item[0]" class="row">
+      <div v-for="(item, index) in picogridItems" :key="'r' + index" class="row">
         <div class="col-xl-12">
-          <event-totals :totals="item[1]" :blockNumber="index"></event-totals>
+          <event-totals :totals="item" :totalsNumber="index"></event-totals>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -59,9 +58,12 @@ export default {
       return (row - 1) * 3 + col
     }
   },
+  created: function() {
+    console.log("DELAY: " + this.interval)
+  },
   computed: {
-    totals: function() {
-      return this.$store.getters.picogridsHashes
+    picogridItems: function() {
+      return this.$store.getters.hashCodes
     }
   }
 }

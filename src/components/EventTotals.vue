@@ -1,12 +1,12 @@
 <template>
   <div class="hash-frame">
-    Block #{{ blockNumber }}: <span class="hash mono">{{ totals }}</span>
+    Block #{{ totalsNumber }}: <span class="hash mono">{{ totals }}</span>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['totals', 'blockNumber']
+  props: ['totals', 'totalsNumber']
 }
 </script>
 
