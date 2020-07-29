@@ -8,9 +8,18 @@ app.use(serveStatic(path.join(__dirname, 'dist')));
 
 const port = process.env.PORT || 80;
 const DATA_URI = process.env.DATA_URI || 'https://eventqueue.herokuapp.com/events';
+const HASH_URI = process.env.HASH_URI || 'https://eventqueue.herokuapp.com/hash';
 
 app.get('/events', (req, res) => {
   fetch(DATA_URI, {method: 'GET'}).
+    then(res => res.json()).
+    then((json) => {
+      res.send(json);
+    });
+});
+
+app.get('/hash', (req, res) => {
+  fetch(`${HASH_URI}?previous=${req.query.previous}&data=${req.query.data}` , {method: 'GET'}).
     then(res => res.json()).
     then((json) => {
       res.send(json);
