@@ -3,6 +3,7 @@ import Vue from 'vue'
 Vue.use(Vuex)
 import {INITIAL_HASH} from '@/mockdata'
 import axios from 'axios'
+import sha256 from 'sha256'
 
 const ENCODE_API_URI = process.env.VUE_APP_ENCODE_API_URI || "/hash"
 const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS || "{}")
@@ -50,22 +51,22 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    addPicogridTotals(context, payload) {
+    async addPicogridTotals(context, payload) {
       context.commit('addPicogridTotals', payload)
       let currentTotals = context.getters.picogridTotalsCurrent
       let hashCodes = context.getters.hashCodes
       let currentIndex = context.getters.currentIndex
+      let previousHash = context.getters.previousHash
       if (currentTotals !== undefined && hashCodes.length < currentIndex + 1) {
         try {
-          let uri = ENCODE_API_URI + "?previous=" + context.getters.previousHash + "&data=" + encodeURIComponent(currentTotals)
-          axios.get(uri, {timeout: 10000, headers: HEADERS})
-            .then(response => {
-              let hashCode = response.data[1]
-              context.commit('addHashCodes', {newHash: hashCode})
-              context.commit('updatePreviousHash', {newHash: hashCode})
-          })
+          let uri = `${ENCODE_API_URI}?previous=${previousHash}&data=${encodeURIComponent(currentTotals)}`
+          let response = await axios.get(uri, {timeout: 10000, headers: HEADERS})
+          let hashCode = response.data[1]
+          context.commit('addHashCodes', {newHash: hashCode})
+          context.commit('updatePreviousHash', {newHash: hashCode})
         } catch(error) {
           console.log("Error while encoding data: " + error)
+          context.commit('addHashCodes', {newHash: sha256(previousHash)})
         }
       }
     }
